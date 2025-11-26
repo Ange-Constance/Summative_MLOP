@@ -1,20 +1,20 @@
 # Dockerfile.api
 FROM python:3.10-slim
 
-# system deps for pillow, sqlite, etc.
+
 RUN apt-get update && apt-get install -y build-essential libglib2.0-0 libsm6 libxext6 libxrender-dev && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# copy only requirements first to cache
+
 COPY requirements.txt ./requirements.txt
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-# copy the rest of the code
+
 COPY . .
 
-# expose the port Render will use
+
 ENV PORT 8000
 EXPOSE 8000
 

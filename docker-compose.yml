@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    deploy:
+      replicas: 3   # note: docker-compose up --scale api=3 also works locally
+    volumes:
+      - ./models:/app/models

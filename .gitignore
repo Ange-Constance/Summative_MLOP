@@ -3,25 +3,18 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-env/
+*.env
+.env
 venv/
-*.egg-info/
+ENV/
+env/
+*.sqlite3
 
-# Data
-
-*.csv
-*.sqlite
-*.db
-
-# Models
-
-
-*.keras
-*.tflite
-*.ckpt
-
-# IDE / system files
-.DS_Store
-.idea/
-.vscode/
+# Jupyter Notebooks
 .ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store

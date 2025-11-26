@@ -2,7 +2,7 @@
 
 ## Deployment Links
 
-- **Video Demo:** (https://www.bugufi.link/qvLhEs)
+- **Video Demo:** [Watch here](https://www.bugufi.link/qvLhEs)
 - **API (Render):** [https://api-zwdd.onrender.com/docs](https://api-zwdd.onrender.com/docs)
 - **Streamlit App (UI):** [https://summative-mlop-4xmz.onrender.com/](https://summative-mlop-4xmz.onrender.com/)
 
@@ -64,7 +64,7 @@ Summative_MLOP/
 
 ---
 
-##  Approach Used
+## Approach Used
 
 - **Image Preprocessing:** Resize, normalize, augment
 - **Model:** TensorFlow/Keras CNN
@@ -76,7 +76,7 @@ Summative_MLOP/
 
 ---
 
-##  Project Setup Instructions
+## Project Setup Instructions
 
 1. **Clone the repository:**
    ```sh
@@ -100,7 +100,7 @@ Summative_MLOP/
 
 ---
 
-##  How to Run the App
+## How to Run the App
 
 - **API (FastAPI):**
 
@@ -118,7 +118,7 @@ Summative_MLOP/
 
 ---
 
-##  Usage
+## Usage
 
 - **Upload Training Image:**
   - Endpoint: `POST /upload_training_image`
@@ -139,7 +139,7 @@ Summative_MLOP/
 
 ---
 
-##  Model Evaluation
+## Model Evaluation
 
 - **Metrics:** Accuracy, confusion matrix, per-class accuracy
 - **Evaluation scripts:** See `notebook/fruits-veggies-pipeline.ipynb`
@@ -147,7 +147,7 @@ Summative_MLOP/
 
 ---
 
-##  Deployment
+## Deployment
 
 - **Docker:**
   - Build and run all services: `docker-compose up --build`
@@ -155,14 +155,13 @@ Summative_MLOP/
 
 ---
 
-##  API Endpoints
+## API Endpoints
 
 - `POST /upload_training_image` — Upload new training image
 - `POST /predict` — Predict fruit/vegetable from image
 
 ---
 
-
-##  Author
+## Author
 
 Ange Constance Nimuhire

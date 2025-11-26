@@ -1,44 +1,30 @@
-# src/app_ui.py
 import streamlit as st
 import requests
 from PIL import Image
-import pandas as pd
-import sqlite3
-import os
+from io import BytesIO
 
-# ------------------ API & Paths ------------------
-BASE_URL = "http://localhost:8000"
-PREDICT_URL = f"{BASE_URL}/predict"
-UPLOAD_URL = f"{BASE_URL}/upload_training_image"
-RETRAIN_URL = f"{BASE_URL}/retrain"
+API_BASE = 'http://127.0.0.1:8000'
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-TRAIN_DIR = os.path.join(BASE_DIR, "data/train")
-DB_PATH = os.path.join(BASE_DIR, "training_images.db")
+PREDICT_URL = f'{API_BASE}/predict'
+UPLOAD_URL = f'{API_BASE}/upload_training_image'
+RETRAIN_URL = f'{API_BASE}/retrain_model'
+UPTIME_URL = f'{API_BASE}/model_uptime'
+METRICS_URL = f'{API_BASE}/get_training_metrics'
+ACC_PLOT_URL = f'{API_BASE}/get_training_accuracy_plot'
+LOSS_PLOT_URL = f'{API_BASE}/get_training_loss_plot'
 
 st.title("Fruits & Vegetables Classifier Application")
 
-# ------------------ TAB LAYOUT ------------------
-tabs = st.tabs([
-    "🔮 Predict",
-    "📤 Upload Training Data",
-    "📊 Data Visualization",
-    "⚡ Retrain Model"
-])
+tab1, tab2, tab3, tab4 = st.tabs(["Predict", "Data Visualization", "Model Retraining", "Model Uptime"])
 
-# ==========================================================
-# 1️⃣ PREDICTION TAB
-# ==========================================================
-with tabs[0]:
-    st.header("Upload an Image for Prediction")
 
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg","jpeg","png"])
-
+with tab1:
+    st.header("Upload an image for prediction")
+    uploaded_file = st.file_uploader("Choose an image...", type=["jpg","jpeg","png"], key="predict_upload")
     if uploaded_file:
         img = Image.open(uploaded_file)
-        st.image(img, caption="Uploaded Image", use_column_width=True)
-
-        if st.button("Predict"):
+        st.image(img, caption='Uploaded image', use_column_width=True)
+        if st.button("Predict", key="predict_btn"):
             files = {"file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)}
             with st.spinner("Sending to API..."):
                 try:
@@ -47,99 +33,95 @@ with tabs[0]:
                         data = resp.json()
                         st.success(f"Prediction: **{data['label']}** — Confidence: {data['confidence']:.2f}")
                     else:
-                        st.error(f"API Error: {resp.status_code} - {resp.text}")
+                        st.error(f"API error: {resp.status_code} - {resp.text}")
                 except Exception as e:
                     st.error(f"Error contacting API: {e}")
 
-
-# ==========================================================
-# 2️⃣ UPLOAD TRAINING DATA TAB
-# ==========================================================
-with tabs[1]:
-    st.header("Upload New Training Images for Retraining")
-
-    upload_label = st.text_input("Label / class name (e.g., apple)")
-    upload_file = st.file_uploader("Choose an image to add", type=["jpg","jpeg","png"])
-
-    if st.button("Upload to Training Set"):
+    st.header("Upload new training images")
+    upload_label = st.text_input("Label / class name", value="", key="label_input")
+    upload_file = st.file_uploader("Choose an image to add to training set", type=["jpg","jpeg","png"], key="train_upload")
+    if st.button("Upload to training set", key="upload_btn"):
         if not upload_label:
-            st.warning("Please enter a label.")
+            st.warning("Please enter a label")
         elif not upload_file:
-            st.warning("Please choose an image file.")
+            st.warning("Please choose a file")
         else:
-            files = {"file": (upload_file.name, upload_file.getvalue(), upload_file.type)}
-            data = {"label": upload_label}
-
-            with st.spinner("Uploading..."):
+            files = {'file': (upload_file.name, upload_file.getvalue(), upload_file.type)}
+            data = {'label': upload_label}
+            with st.spinner("Uploading to training set..."):
                 try:
                     resp = requests.post(UPLOAD_URL, files=files, data=data, timeout=60)
                     if resp.status_code == 200:
-                        st.success("Saved to training set: " + resp.json().get("path",""))
+                        st.success("Saved to training set: " + resp.json().get('path', ''))
                     else:
                         st.error("Upload failed: " + resp.text)
                 except Exception as e:
                     st.error("Error contacting API: " + str(e))
 
 
-# ==========================================================
-# 3️⃣ DATA VISUALIZATION TAB
-# ==========================================================
-with tabs[2]:
-    st.header("Training Data Visualization")
+with tab2:
+    st.header("Data Visualization")
 
-    # --- Class distribution ---
-    st.subheader("📌 Class Distribution (Image Count per Label)")
-    if os.path.exists(TRAIN_DIR):
-        class_counts = {}
-        for label in os.listdir(TRAIN_DIR):
-            label_path = os.path.join(TRAIN_DIR, label)
-            if os.path.isdir(label_path):
-                class_counts[label] = len(os.listdir(label_path))
-        if class_counts:
-            df_counts = pd.DataFrame(list(class_counts.items()), columns=["Label","Image Count"])
-            st.bar_chart(df_counts.set_index("Label"))
-            st.dataframe(df_counts)
+
+    try:
+        resp = requests.get(METRICS_URL, timeout=10)
+        if resp.status_code == 200:
+            metrics = resp.json()
+            st.subheader("Test Metrics")
+            st.text(metrics.get("metrics", "No metrics available."))
         else:
-            st.warning("No training data found.")
-    else:
-        st.error("Training directory not found.")
-
-    st.markdown("---")
-
-    # --- Upload history from DB ---
-    st.subheader("📁 Uploaded Images Log (From Database)")
-    if os.path.exists(DB_PATH):
-        try:
-            conn = sqlite3.connect(DB_PATH)
-            df_uploads = pd.read_sql_query("SELECT * FROM uploads", conn)
-            conn.close()
-            st.dataframe(df_uploads)
-        except Exception as e:
-            st.error(f"Error loading database: {e}")
-    else:
-        st.warning("Upload database not found.")
+            st.info("Metrics not available yet.")
+    except Exception as e:
+        st.info("Error fetching metrics: " + str(e))
 
 
-# ==========================================================
-# 4️⃣ RETRAIN MODEL TAB
-# ==========================================================
-with tabs[3]:
-    st.header("⚡ Retrain Model")
+    try:
+        resp = requests.get(ACC_PLOT_URL, timeout=10)
+        if resp.status_code == 200:
+            acc_img = Image.open(BytesIO(resp.content))
+            st.subheader("Training Accuracy")
+            st.image(acc_img)
+        else:
+            st.info("No training accuracy plot found.")
+    except Exception as e:
+        st.info("Error fetching accuracy plot: " + str(e))
 
-    st.write("Click the button below to retrain the model using the current training dataset.")
+    try:
+        resp = requests.get(LOSS_PLOT_URL, timeout=10)
+        if resp.status_code == 200:
+            loss_img = Image.open(BytesIO(resp.content))
+            st.subheader("Training Loss")
+            st.image(loss_img)
+        else:
+            st.info("No training loss plot found.")
+    except Exception as e:
+        st.info("Error fetching loss plot: " + str(e))
+
+with tab3:
+    st.header("Model Retraining")
     if st.button("Retrain Model"):
-        with st.spinner("Retraining model... this may take a few minutes"):
+        with st.spinner("Retraining model..."):
             try:
-                resp = requests.post(RETRAIN_URL, timeout=300)  # longer timeout
+                resp = requests.post(RETRAIN_URL, timeout=10)
                 if resp.status_code == 200:
-                    metrics = resp.json().get("metrics", {})
-                    st.success("Model retrained successfully!")
-                    st.write("### Training Metrics")
-                    st.write(f"Training Accuracy: {metrics.get('train_acc',0):.4f}")
-                    st.write(f"Training Loss: {metrics.get('train_loss',0):.4f}")
-                    st.write(f"Validation Accuracy: {metrics.get('val_acc',0):.4f}")
-                    st.write(f"Validation Loss: {metrics.get('val_loss',0):.4f}")
+                    st.success(resp.json().get('message', 'Training started!'))
                 else:
-                    st.error(f"Retrain failed: {resp.status_code} - {resp.text}")
+                    st.error(f"Retrain failed: {resp.text}")
+            except Exception as e:
+                st.error(f"Error contacting API: {e}")
+
+
+with tab4:
+    st.header("Model Uptime")
+    if st.button("Check Model Uptime"):
+        with st.spinner("Checking model uptime..."):
+            try:
+                resp = requests.get(UPTIME_URL, timeout=10)
+                if resp.status_code == 200:
+                    status = resp.json()
+                    st.success(f"Model Status: {status.get('status','Unknown')}")
+                    st.write(status)
+                else:
+                    st.error(f"Status check failed: {resp.text}")
             except Exception as e:
                 st.error(f"Error contacting API: {e}")
