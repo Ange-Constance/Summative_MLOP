@@ -49,6 +49,9 @@ htmlcov/
 .coverage
 data/
 .coverage.*
+/data/train
+/data/validation
+/data/test
 .cache
 nosetests.xml
 coverage.xml
