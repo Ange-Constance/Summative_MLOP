@@ -20,6 +20,9 @@ parts/
 sdist/
 var/
 data/
+# Keras model files
+*.h5
+*.keras
 *.egg-info/
 .installed.cfg
 *.egg
