@@ -1,3 +1,11 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:22d19be52a47c7ac1ea8c3cd92a4de3ef4cf45d2800b62f5a79857d1542e121d
-size 338
+from locust import HttpUser, task, between
+import base64
+
+class MLUser(HttpUser):
+    wait_time = between(0.5, 2)
+
+    @task
+    def predict(self):
+        with open('sample_images/apple_01.jpg', 'rb') as f:
+            files = {'file': ('apple_01.jpg', f, 'image/jpeg')}
+            self.client.post('/predict', files=files, timeout=30)
