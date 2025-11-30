@@ -1,95 +1,27 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+*.egg-info/
 
-# C extensions
-*.so
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
+# Data
 data/
-# Keras model files
+*.csv
+*.sqlite
+*.db
+
+# Models
+models/
 *.h5
 *.keras
-*.egg-info/
-.installed.cfg
-*.egg
+*.tflite
+*.ckpt
 
-# Virtual environments
-venv/
-ENV/
-env/
-.venv/
-.env/
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-data/
-.coverage.*
-/data/train
-/data/validation
-/data/test
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# VS Code
-.vscode/
-
-# macOS
+# IDE / system files
 .DS_Store
-
-# System files
-Thumbs.db
-Desktop.ini
-
-# Logs
-*.log
-
-# Local env files
-*.env
-*.env.*
-
-# Other
 .idea/
-*.iml
-
+.vscode/
+.ipynb_checkpoints/
