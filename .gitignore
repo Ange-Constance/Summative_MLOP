@@ -8,14 +8,14 @@ venv/
 *.egg-info/
 
 # Data
-data/
+
 *.csv
 *.sqlite
 *.db
 
 # Models
-models/
-*.h5
+
+
 *.keras
 *.tflite
 *.ckpt
