@@ -105,7 +105,7 @@ init_db()
 # ==========================================================
 # -------------   UPLOAD TRAINING IMAGE  --------------------
 # ==========================================================
-@app.post("/upload_training_image_upload_training_image_post")
+@app.post("/upload_training_image")
 async def upload_training_image(file: UploadFile = File(...), label: str = Form(...)):
     label = label.strip()
     if not label:
@@ -148,7 +148,7 @@ async def upload_training_image(file: UploadFile = File(...), label: str = Form(
 # ==========================================================
 # ---------------------  PREDICT  ---------------------------
 # ==========================================================
-@app.post("/retrain_retrain_post")
+@app.post("/retrain")
 async def predict(file: UploadFile = File(...)):
     if model is None:
         raise HTTPException(status_code=500, detail="Model not loaded")
