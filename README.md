@@ -1,14 +1,14 @@
 # Fruits & Veggies Classification API
 
-## 🚀 Deployment Links
+## Deployment Links
 
-- **🎥 Video Demo:** [Watch here](https://www.bugufi.link/qvLhEs)
+- **Video Demo:** (https://www.bugufi.link/qvLhEs)
 - **API (Render):** [https://api-zwdd.onrender.com/docs](https://api-zwdd.onrender.com/docs)
 - **Streamlit App (UI):** [https://summative-mlop-4xmz.onrender.com/](https://summative-mlop-4xmz.onrender.com/)
 
 ---
 
-## 📋 Project Objective
+## Project Objective
 
 Build an end-to-end machine learning pipeline to classify images of fruits and vegetables, with:
 
@@ -19,7 +19,7 @@ Build an end-to-end machine learning pipeline to classify images of fruits and v
 
 ---
 
-## 🥗 Dataset Used
+## Dataset Used
 
 - **Source:** [Kaggle Dataset](https://www.kaggle.com/datasets/kritikseth/fruit-and-vegetable-image-recognition/code/data) (stored in the `data/` folder)
 - **Classes:** 36 fruits and vegetables (see `data/train/` for full list)
@@ -30,7 +30,7 @@ Build an end-to-end machine learning pipeline to classify images of fruits and v
 
 ---
 
-## ✨ Features
+## Features
 
 - Upload new training images via API
 - Predict fruit/vegetable from image
@@ -41,7 +41,7 @@ Build an end-to-end machine learning pipeline to classify images of fruits and v
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 Summative_MLOP/
@@ -64,7 +64,7 @@ Summative_MLOP/
 
 ---
 
-## 🧑‍💻 Approach Used
+##  Approach Used
 
 - **Image Preprocessing:** Resize, normalize, augment
 - **Model:** TensorFlow/Keras CNN
@@ -76,7 +76,7 @@ Summative_MLOP/
 
 ---
 
-## ⚙️ Project Setup Instructions
+##  Project Setup Instructions
 
 1. **Clone the repository:**
    ```sh
@@ -100,7 +100,7 @@ Summative_MLOP/
 
 ---
 
-## ▶️ How to Run the App
+##  How to Run the App
 
 - **API (FastAPI):**
 
@@ -118,7 +118,7 @@ Summative_MLOP/
 
 ---
 
-## 🛠️ Usage
+##  Usage
 
 - **Upload Training Image:**
   - Endpoint: `POST /upload_training_image`
@@ -131,7 +131,7 @@ Summative_MLOP/
 
 ---
 
-## 🗄️ Database Implementation
+## Database Implementation
 
 - **SQLite** database (`training_images.db`) tracks all uploaded images:
   - `id`, `filename`, `label`, `saved_path`, `uploaded_at`
@@ -139,7 +139,7 @@ Summative_MLOP/
 
 ---
 
-## 📊 Model Evaluation
+##  Model Evaluation
 
 - **Metrics:** Accuracy, confusion matrix, per-class accuracy
 - **Evaluation scripts:** See `notebook/fruits-veggies-pipeline.ipynb`
@@ -147,7 +147,7 @@ Summative_MLOP/
 
 ---
 
-## 🚢 Deployment
+##  Deployment
 
 - **Docker:**
   - Build and run all services: `docker-compose up --build`
@@ -155,20 +155,14 @@ Summative_MLOP/
 
 ---
 
-## 🔗 API Endpoints
+##  API Endpoints
 
 - `POST /upload_training_image` — Upload new training image
 - `POST /predict` — Predict fruit/vegetable from image
 
 ---
 
-## 🙏 Acknowledgements
 
-- TensorFlow, FastAPI, Streamlit, Pillow, NumPy
-- Dataset: Custom/collected
-
----
-
-## 📧 Author
+##  Author
 
 Ange Constance Nimuhire
