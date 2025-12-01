@@ -11,6 +11,7 @@ import time
 import json
 import numpy as np
 import tensorflow as tf
+import requests
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # ------------------ PATHS ------------------
@@ -23,6 +24,29 @@ DB_PATH = os.path.join(BASE_DIR, 'training_images.db')
 
 MODEL_PATH = os.path.join(MODELS_DIR, 'fruits_veggies_model.keras')
 CLASS_JSON = os.path.join(MODELS_DIR, 'class_indices.json')
+MODEL_URL = "https://drive.google.com/file/d/1MwclD1OfX_OrA0UQQk_1sjTAO47TBJ6t/view?usp=drive_link"  
+
+
+
+model = None
+class_indices = {}
+
+if not os.path.exists(MODEL_PATH):
+    print("Model file not found. Downloading from cloud storage...")
+    os.makedirs(MODELS_DIR, exist_ok=True)
+    r = requests.get(MODEL_URL)
+    with open(MODEL_PATH, "wb") as f:
+        f.write(r.content)
+    print("Model downloaded.")
+
+try:
+    model = tf.keras.models.load_model(MODEL_PATH)
+    with open(CLASS_JSON, 'r') as f:
+        class_indices = json.load(f)
+    print("Model loaded successfully.")
+except Exception as e:
+    print("Model NOT loaded:", e)
+
 
 # ------------------ FASTAPI ------------------
 app = FastAPI(title="Fruits & Veggies API")
